@@ -5,7 +5,7 @@ namespace Spartan.Persistence.Contexts
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) 
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
 
@@ -27,12 +27,6 @@ namespace Spartan.Persistence.Contexts
                 .HasMany(p => p.Products)
                 .WithOne(p => p.Category)
                 .HasForeignKey(p => p.CategoryId);
-
-            builder.Entity<Category>().HasData
-            (
-                new Category { Id = 100, Name = "Fruits and Vegetables" }, // Id set manually due to in-memory provider
-                new Category { Id = 101, Name = "Dairy" }
-            );
 
 
             builder.Entity<Product>().ToTable("Products");
