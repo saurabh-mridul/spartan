@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +24,6 @@ namespace Spartan
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddAutoMapper();
 
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("spartan-in-memory"));
             services.AddScoped<ICategoryRepository, CategoryRepository>();

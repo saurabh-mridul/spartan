@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Spartan.Models;
-using Spartan.Resources;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Spartan.Extensions;
@@ -13,29 +11,25 @@ namespace Spartan.Controllers
     public class CategoriesController : Controller
     {
         private readonly ICategoryService _categoryService;
-        private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoryService categoryService, IMapper mapper)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _mapper = mapper;
             _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CategoryResource>> GetAllAsync()
+        public async Task<IEnumerable<Category>> GetAllAsync()
         {
             var categories = await _categoryService.ListAsync();
-            var resources = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryResource>>(categories);
-            return resources;
+            return categories;
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] SaveCategoryResource resource)
+        public async Task<IActionResult> PostAsync([FromBody] Category category)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var category = _mapper.Map<SaveCategoryResource, Category>(resource);
             await _categoryService.SaveAsync(category);
 
             //if (result == null)
@@ -45,12 +39,11 @@ namespace Spartan.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, [FromBody] SaveCategoryResource resource)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] Category category)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var category = _mapper.Map<SaveCategoryResource, Category>(resource);
             await _categoryService.UpdateAsync(id, category);
 
             //if (!result.Success)
