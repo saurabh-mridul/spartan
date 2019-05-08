@@ -8,11 +8,11 @@ namespace Spartan.Persistence.Contexts
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-
         }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -35,6 +35,10 @@ namespace Spartan.Persistence.Contexts
             builder.Entity<Product>().Property(p => p.Name).IsRequired().HasMaxLength(50);
             builder.Entity<Product>().Property(p => p.QuantityInPackage).IsRequired();
             builder.Entity<Product>().Property(p => p.UnitOfMeasurement).IsRequired();
+
+            builder.Entity<User>().ToTable("Users");
+            builder.Entity<User>().HasKey(p=>p.Id);
+            builder.Entity<User>().Property(p=>p.Name).IsRequired();
         }
     }
 }

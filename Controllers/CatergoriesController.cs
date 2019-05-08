@@ -4,16 +4,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Spartan.Extensions;
 using Spartan.Interfaces;
+using Microsoft.Extensions.Logging;
+using Spartan.Common;
+using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Spartan.Controllers
 {
+    [Authorize]
     [Route("/api/[controller]")]
-    public class CategoriesController : Controller
+    [ApiController]
+    public class CategoriesController : ControllerBase
     {
+        private readonly ILogger _logger;
         private readonly ICategoryService _categoryService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService, ILogger<CategoriesController> logger)
         {
+            _logger = logger;
             _categoryService = categoryService;
         }
 
@@ -27,15 +35,24 @@ namespace Spartan.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] Category category)
         {
+            _logger?.LogDebug("'{0}' has been invoked", nameof(PostAsync));
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            await _categoryService.SaveAsync(category);
+            IResponse response = new Response();
+            try
+            {
+                await _categoryService.SaveAsync(category);
+            }
+            catch (Exception ex)
+            {
+                response.HasError = true;
+                response.ErrorMessage = "There was an internal error, please contact to technical support.";
 
-            //if (result == null)
-            //    return BadRequest("something went wrong.");
-
-            return Ok();
+                _logger?.LogCritical("There was an error on '{0}' invocation: {1}", nameof(PostAsync), ex);
+            }
+            return response.ToHttpResponse();
         }
 
         [HttpPut("{id}")]
