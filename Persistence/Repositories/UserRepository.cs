@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Spartan.Common;
 using Spartan.Interfaces;
 using Spartan.Models;
 using Spartan.Persistence.Contexts;
+using Spartan.Resources;
 
 namespace Spartan.Persistence.Repositories
 {
@@ -36,6 +38,13 @@ namespace Spartan.Persistence.Repositories
         {
             var users = await _context.Users.Include(p => p.Photos).ToListAsync();
             return users;
+        }
+
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
+        {
+            var users = _context.Users.Include(p => p.Photos);
+
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PazeSize);
         }
 
         public async Task<bool> SaveAll()
