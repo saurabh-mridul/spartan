@@ -111,7 +111,7 @@ namespace Spartan
             seeder.SeedUsers();
             app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
 
             // app.Run(async context =>
