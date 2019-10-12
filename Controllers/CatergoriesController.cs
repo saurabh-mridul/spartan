@@ -25,6 +25,7 @@ namespace Spartan.Controllers
             _categoryService = categoryService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<Category>> GetAllAsync()
         {

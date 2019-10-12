@@ -1,0 +1,29 @@
+version: "3"
+
+networks:
+  dockerapi-dev:
+    driver: bridge
+
+services:
+  dockerapi:
+    image: dockerapi:latest
+    depends_on:
+      - "postgres_image"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    enviornment:
+      DB_CONNECTION_STRING: ""
+    networks:
+      - dockerapi-dev
+
+  postgress_image:
+    image: postgres:latest
+    ports:
+      - "5432"
+    restart: always
+    volumes:
+      - db_volume: /var/lib/postgressql/data
+      - ./

@@ -42,9 +42,10 @@ namespace Spartan
                               });
 
             services.AddDbContext<AppDbContext>(options =>
-                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                        //options.UseInMemoryDatabase("someDB")
-                        .ConfigureWarnings(warnings=> warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
+                        //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                        options.UseInMemoryDatabase("someDB")
+
+                        .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
